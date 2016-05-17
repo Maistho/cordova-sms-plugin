@@ -1,5 +1,7 @@
 #Cordova SMS Plugin
 
+## This fork removes the SEND_SMS permission, but is otherwise exactly the same as cordova-sms-plugin
+
 Cross-platform plugin for Cordova / PhoneGap to to easily send SMS. Available for **Android**, **iOS**, **Windows Phone 8** and **Windows 10 Universal (BETA)**.
 
 ##Installing the plugin
@@ -26,7 +28,7 @@ Javascript
             var number = document.getElementById('numberTxt').value;
             var message = document.getElementById('messageTxt').value;
             console.log("number=" + number + ", message= " + message);
-  
+
             //CONFIGURATION
             var options = {
                 replaceLineBreaks: false, // true to replace \n by a new line, false by default
@@ -46,7 +48,7 @@ On Android, an extra function is exposed to know whether or not you have the per
 
     var app = {
         checkSMSPermission: function() {
-            var success = function (hasPermission) { 
+            var success = function (hasPermission) {
                 if (hasPermission) {
                     sms.send(...);
                 }
@@ -69,7 +71,7 @@ Please go through all the [closed issues about this subject](https://github.com/
 
 You need to update `cordova-android` to the latest version (recommended), or at least to the version 5.1.1.
 
-`cordova platform update android` or `cordova platform update android@5.1.1` 
+`cordova platform update android` or `cordova platform update android@5.1.1`
 
 ####Is the plugin available on [Adobe PhoneGap Build](https://build.phonegap.com)?
 
@@ -79,7 +81,7 @@ Yes, the plugin is available, please see instructions here: https://build.phoneg
 
 You can't receive SMS via this plugin. This plugin only sends SMS.
 
-####Android immediately passes success back to app? 
+####Android immediately passes success back to app?
 
 Please read [#issue 26](https://github.com/cordova-sms/cordova-sms-plugin/issues/26)
 
