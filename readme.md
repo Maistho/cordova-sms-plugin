@@ -2,7 +2,9 @@
 
 ## This fork removes the SEND_SMS permission, but is otherwise exactly the same as cordova-sms-plugin
 
-Cross-platform plugin for Cordova / PhoneGap to to easily send SMS. Available for **Android**, **iOS**, **Windows Phone 8** and **Windows 10 Universal (BETA)**.
+<a target='_blank' href='https://app.codesponsor.io/link/nnq4YKjaFeDVYQrFbBYw4qNV/cordova-sms/cordova-sms-plugin'>  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/nnq4YKjaFeDVYQrFbBYw4qNV/cordova-sms/cordova-sms-plugin.svg' /></a>
+
+Cross-platform plugin for Cordova / PhoneGap to to easily send SMS. Available for **Android**, **iOS**, **Windows Phone 8** and **Windows 10 Universal**.
 
 ## Installing the plugin
 
@@ -25,7 +27,7 @@ Javascript
 
     var app = {
         sendSms: function() {
-            var number = document.getElementById('numberTxt').value;
+            var number = document.getElementById('numberTxt').value.toString(); /* iOS: ensure number is actually a string */
             var message = document.getElementById('messageTxt').value;
             console.log("number=" + number + ", message= " + message);
 
@@ -81,13 +83,13 @@ Yes, the plugin is available, please see instructions here: http://docs.phonegap
 
 You can't receive SMS via this plugin. This plugin only sends SMS.
 
-<<<<<<< HEAD
-####Android immediately passes success back to app?
-=======
-#### Android immediately passes success back to app? 
->>>>>>> upstream/master
+#### Android immediately passes success back to app?
 
 Please read [#issue 26](https://github.com/cordova-sms/cordova-sms-plugin/issues/26)
+
+#### iOS closes the SMS dialog instantly. What's wrong?
+
+Make sure the `number` argument passed is converted to string first using either `String(number)` or `number.toString()`. Notice that `toString()` won't work if the number argument is `null` or `undefined`.
 
 #### I get this error. What's wrong?
 
@@ -120,8 +122,22 @@ The problem is that you need to make sure that you set the target to android-19 
 
 This isn't possible on iOS. It requires that you show the user the native sms composer, to be able to send an sms.
 
-Contributing
-============
+
+## Donations
+
+If your app is successful or if you are working for a company, please consider donating some beer money :beer::
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.me/dbaq/10)
+
+Or visit our sponsor:
+
+<a target='_blank' href='https://app.codesponsor.io/link/nnq4YKjaFeDVYQrFbBYw4qNV/cordova-sms/cordova-sms-plugin'>  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/nnq4YKjaFeDVYQrFbBYw4qNV/cordova-sms/cordova-sms-plugin.svg' /></a>
+
+
+Keep in mind that I am maintaining this repository on my free time so thank you for considering a donation. :+1:
+
+
+## Contributing
 
 I believe that everything is working, feel free to put in an issue or to fork and make pull requests if you want to add a new feature.
 
