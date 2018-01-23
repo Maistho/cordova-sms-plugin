@@ -1,8 +1,6 @@
 # Cordova SMS Plugin
 
-## This fork removes the SEND_SMS permission, but is otherwise exactly the same as cordova-sms-plugin
-
-<a target='_blank' href='https://app.codesponsor.io/link/nnq4YKjaFeDVYQrFbBYw4qNV/cordova-sms/cordova-sms-plugin'>  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/nnq4YKjaFeDVYQrFbBYw4qNV/cordova-sms/cordova-sms-plugin.svg' /></a>
+## This fork removes the possibility to directly send sms messages on android, in order to simplify and not need any special permissions
 
 Cross-platform plugin for Cordova / PhoneGap to to easily send SMS. Available for **Android**, **iOS**, **Windows Phone 8** and **Windows 10 Universal**.
 
@@ -10,11 +8,7 @@ Cross-platform plugin for Cordova / PhoneGap to to easily send SMS. Available fo
 
 Using the Cordova CLI and NPM, run:
 
-    cordova plugin add cordova-sms-plugin
-
-It is also possible to install via repo url directly (unstable), run :
-
-    cordova plugin add https://github.com/cordova-sms/cordova-sms-plugin.git
+    cordova plugin add @ifiske/cordova-plugin-sms
 
 ## Using the plugin
 HTML
@@ -33,11 +27,7 @@ Javascript
 
             //CONFIGURATION
             var options = {
-                replaceLineBreaks: false, // true to replace \n by a new line, false by default
-                android: {
-                    intent: 'INTENT'  // send SMS with the native android SMS messaging
-                    //intent: '' // send SMS without open any other app
-                }
+                replaceLineBreaks: false // true to replace \n by a new line, false by default
             };
 
             var success = function () { alert('Message sent successfully'); };
@@ -46,34 +36,10 @@ Javascript
         }
     };
 
-On Android, an extra function is exposed to know whether or not you have the permission to send a SMS (Android Marshmallow permission).
-
-    var app = {
-        checkSMSPermission: function() {
-            var success = function (hasPermission) {
-                if (hasPermission) {
-                    sms.send(...);
-                }
-                else {
-                    // show a helpful message to explain why you need to require the permission to send a SMS
-                    // read http://developer.android.com/training/permissions/requesting.html#explain for more best practices
-                }
-            };
-            var error = function (e) { alert('Something went wrong:' + e); };
-            sms.hasPermission(success, error);
-        }
-    };
-
 ## FAQ
 #### `sms` is undefined
 
 Please go through all the [closed issues about this subject](https://github.com/cordova-sms/cordova-sms-plugin/issues?q=is%3Aissue+is%3Aclosed+sms+label%3A%22sms+undefined%22). The issue is mostly coming from the way you installed the plugin, please double check everything before opening another issue.
-
-#### When building my project for android I get the following error: `cannot find symbol: cordova.hasPermission(string)`
-
-You need to update `cordova-android` to the latest version (recommended), or at least to the version 5.1.1.
-
-`cordova platform update android` or `cordova platform update android@5.1.1`
 
 #### Is the plugin available on [Adobe PhoneGap Build](https://build.phonegap.com)?
 
@@ -118,25 +84,6 @@ The problem is that you need to make sure that you set the target to android-19 
     target=android-19
 
 
-##### How can I send an sms in my iOS app without passing control to the native app like it can be done on Android?
-
-This isn't possible on iOS. It requires that you show the user the native sms composer, to be able to send an sms.
-
-
-## Donations
-
-If your app is successful or if you are working for a company, please consider donating some beer money :beer::
-
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.me/dbaq/10)
-
-Or visit our sponsor:
-
-<a target='_blank' href='https://app.codesponsor.io/link/nnq4YKjaFeDVYQrFbBYw4qNV/cordova-sms/cordova-sms-plugin'>  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/nnq4YKjaFeDVYQrFbBYw4qNV/cordova-sms/cordova-sms-plugin.svg' /></a>
-
-
-Keep in mind that I am maintaining this repository on my free time so thank you for considering a donation. :+1:
-
-
 ## Contributing
 
 I believe that everything is working, feel free to put in an issue or to fork and make pull requests if you want to add a new feature.
@@ -174,21 +121,10 @@ Ask, or pick an issue and comment on it announcing your desire to work on it. Id
 
 - Squash related commits as much as possible.
 
-### Coding style
-
-- Try to match the existing indent style.
-
-- Don't mix platform-specific stuff into the main code.
-
-
-
-
 ## History
 
--  The Android portion was forked from https://github.com/javatechig/phonegap-sms-plugin by @javatechig and then modified to upgrade it to phonegap 3.0.
-- The iOS portion was copied from https://github.com/phonegap/phonegap-plugins by Jesse MacFadyen and then modified slightly to work with this plugin and phonegap 3.x by @aharris88.
-- The Windows Phone 8 part was contributed by [fredrikeldh](https://github.com/fredrikeldh)
-- This repository is now maintained by @dbaq.
+- The entire thing is forked from https://github.com/cordova-sms/cordova-sms-plugin
+- Fork maintained mostly for internal purposes by @maistho
 
 ## License
 

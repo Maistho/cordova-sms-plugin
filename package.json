@@ -1,9 +1,9 @@
 {
   "name": "@ifiske/cordova-plugin-sms",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Cross-platform plugin for Cordova / PhoneGap to to easily send SMS. Available for Android, iOS and WP.",
   "cordova": {
-    "id": "cordova-sms-plugin",
+    "id": "cordova-plugin-sms",
     "platforms": [
       "android",
       "wp8",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cordova-sms/cordova-sms-plugin.git"
+    "url": "git+https://github.com/ifiske/cordova-plugin-sms.git"
   },
   "keywords": [
     "cordova",
@@ -25,16 +25,13 @@
     "cordova-ios",
     "cordova-windows"
   ],
-  "engines": [
-    {
-      "name": "cordova",
-      "version": ">=3.0.0"
-    }
-  ],
-  "author": "Didier Baquier",
+  "engines": {
+    "cordova": ">=3.0.0"
+  },
+  "author": "Gustav Bylund",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cordova-sms/cordova-sms-plugin/issues"
+    "url": "https://github.com/ifiske/cordova-plugin-sms/issues"
   },
-  "homepage": "https://github.com/cordova-sms/cordova-sms-plugin#readme"
+  "homepage": "https://github.com/ifiske/cordova-plugin-sms#readme"
 }
