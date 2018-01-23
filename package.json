@@ -1,5 +1,5 @@
 {
-  "name": "cordova-sms-plugin-no-send-sms-permission",
+  "name": "@ifiske/cordova-plugin-sms",
   "version": "1.0.0",
   "description": "Cross-platform plugin for Cordova / PhoneGap to to easily send SMS. Available for Android, iOS and WP.",
   "cordova": {
