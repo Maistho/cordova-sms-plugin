@@ -38,42 +38,10 @@ public class Sms extends CordovaPlugin {
 		this.callbackContext = callbackContext;
 		this.args = args;
 		if (action.equals(ACTION_SEND_SMS)) {
-			boolean isIntent = false;
-			try {
-				isIntent = args.getString(2).equalsIgnoreCase("INTENT");
-			} catch (NullPointerException npe) {
-				// It might throw a NPE, but it doesn't matter.
-			}
-			if (isIntent || hasPermission()) {
-				sendSMS();
-			} else {
-				requestPermission();
-			}
-			return true;
-		}
-		else if (action.equals(ACTION_HAS_PERMISSION)) {
-			callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, hasPermission()));
+			sendSMS();
 			return true;
 		}
 		return false;
-	}
-
-	private boolean hasPermission() {
-		return cordova.hasPermission(android.Manifest.permission.SEND_SMS);
-	}
-
-	private void requestPermission() {
-		cordova.requestPermission(this, SEND_SMS_REQ_CODE, android.Manifest.permission.SEND_SMS);
-	}
-
-	public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
-		for (int r : grantResults) {
-			if (r == PackageManager.PERMISSION_DENIED) {
-				callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, "User has denied permission"));
-				return;
-			}
-		}
-		sendSMS();
 	}
 
 	private boolean sendSMS() {
@@ -89,8 +57,7 @@ public class Sms extends CordovaPlugin {
 					}
 					String phoneNumber = args.getJSONArray(0).join(separator).replace("\"", "");
 					String message = args.getString(1);
-					String method = args.getString(2);
-					boolean replaceLineBreaks = Boolean.parseBoolean(args.getString(3));
+					boolean replaceLineBreaks = Boolean.parseBoolean(args.getString(2));
 
 					// replacing \n by new line if the parameter replaceLineBreaks is set to true
 					if (replaceLineBreaks) {
@@ -100,13 +67,9 @@ public class Sms extends CordovaPlugin {
 						callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, "SMS not supported on this platform"));
 						return;
 					}
-					if (method.equalsIgnoreCase("INTENT")) {
-						invokeSMSIntent(phoneNumber, message);
-						// always passes success back to the app
-						callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
-					} else {
-						send(callbackContext, phoneNumber, message);
-					}
+					invokeSMSIntent(phoneNumber, message);
+					// always passes success back to the app
+					callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
 					return;
 				} catch (JSONException ex) {
 					callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION));
@@ -142,60 +105,5 @@ public class Sms extends CordovaPlugin {
 			sendIntent.setData(Uri.parse("smsto:" + Uri.encode(phoneNumber)));
 		}
 		this.cordova.getActivity().startActivity(sendIntent);
-	}
-
-	private void send(final CallbackContext callbackContext, String phoneNumber, String message) {
-		SmsManager manager = SmsManager.getDefault();
-		final ArrayList<String> parts = manager.divideMessage(message);
-
-		// by creating this broadcast receiver we can check whether or not the SMS was sent
-		final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-
-			boolean anyError = false; //use to detect if one of the parts failed
-			int partsCount = parts.size(); //number of parts to send
-
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				switch (getResultCode()) {
-				case SmsManager.STATUS_ON_ICC_SENT:
-				case Activity.RESULT_OK:
-					break;
-				case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-				case SmsManager.RESULT_ERROR_NO_SERVICE:
-				case SmsManager.RESULT_ERROR_NULL_PDU:
-				case SmsManager.RESULT_ERROR_RADIO_OFF:
-					anyError = true;
-					break;
-				}
-				// trigger the callback only when all the parts have been sent
-				partsCount--;
-				if (partsCount == 0) {
-					if (anyError) {
-						callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
-					} else {
-						callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
-					}
-					cordova.getActivity().unregisterReceiver(this);
-				}
-			}
-		};
-
-		// randomize the intent filter action to avoid using the same receiver
-		String intentFilterAction = INTENT_FILTER_SMS_SENT + java.util.UUID.randomUUID().toString();
-		this.cordova.getActivity().registerReceiver(broadcastReceiver, new IntentFilter(intentFilterAction));
-
-		PendingIntent sentIntent = PendingIntent.getBroadcast(this.cordova.getActivity(), 0, new Intent(intentFilterAction), 0);
-
-		// depending on the number of parts we send a text message or multi parts
-		if (parts.size() > 1) {
-			ArrayList<PendingIntent> sentIntents = new ArrayList<PendingIntent>();
-			for (int i = 0; i < parts.size(); i++) {
-				sentIntents.add(sentIntent);
-			}
-			manager.sendMultipartTextMessage(phoneNumber, null, parts, sentIntents, null);
-		}
-		else {
-			manager.sendTextMessage(phoneNumber, null, message, sentIntent, null);
-		}
 	}
 }
